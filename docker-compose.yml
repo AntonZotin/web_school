@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_school
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: school_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./web/sql/init_tables.sql:/docker-entrypoint-initdb.d/init_tables.sql
+    networks:
+      - school_network
+
+  php-app:
+    build: web
+    container_name: php_school_app
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - school_network
+    environment:
+      - DB_HOST=mysql
+    volumes:
+      - ./web:/var/www/html
+
+networks:
+  school_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
