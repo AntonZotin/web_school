@@ -8,6 +8,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Школа - Веб-приложение</title>
     <link rel="stylesheet" href="/assets/style.css">
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <header>

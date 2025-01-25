@@ -23,6 +23,7 @@ $teachers = $teacher->getTeachers();
 $filters = [
     'class_id' => $_GET['class_id'] ?? null,
     'teacher_id' => $_GET['teacher_id'] ?? null,
+    'sort_by' => $_GET['sort_by'] ?? 'day_of_week',
 ];
 
 $schedule_items = $schedule->getScheduleByFilter($filters);
@@ -30,31 +31,40 @@ $schedule_items = $schedule->getScheduleByFilter($filters);
 
 <h1>Расписание</h1>
 
-<form method="GET" action="">
-    <label for="class_id">Выберите класс:</label>
-    <select name="class_id" id="class_id">
-        <option value="">Все классы</option>
-        <?php foreach ($classrooms as $class): ?>
-            <option value="<?php echo $class['class_id']; ?>"
-                <?php echo isset($filters['class_id']) && $filters['class_id'] == $class['class_id'] ? 'selected' : ''; ?>>
-                <?php echo htmlspecialchars($class['class_name']); ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+<div class="filters">
+    <form method="GET" action="">
+        <label for="class_id">Класс:</label>
+        <select name="class_id" id="class_id">
+            <option value="">Все классы</option>
+            <?php foreach ($classrooms as $class): ?>
+                <option value="<?php echo $class['class_id']; ?>"
+                    <?php echo isset($filters['class_id']) && $filters['class_id'] == $class['class_id'] ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($class['class_name']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-    <label for="teacher_id">Выберите преподавателя:</label>
-    <select name="teacher_id" id="teacher_id">
-        <option value="">Все преподаватели</option>
-        <?php foreach ($teachers as $teacherItem): ?>
-            <option value="<?php echo $teacherItem['teacher_id']; ?>"
-                <?php echo isset($filters['teacher_id']) && $filters['teacher_id'] == $teacherItem['teacher_id'] ? 'selected' : ''; ?>>
-                <?php echo htmlspecialchars($teacherItem['first_name'] . " " . $teacherItem['last_name']); ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+        <label for="teacher_id">Преподаватель:</label>
+        <select name="teacher_id" id="teacher_id">
+            <option value="">Все преподаватели</option>
+            <?php foreach ($teachers as $teacherItem): ?>
+                <option value="<?php echo $teacherItem['teacher_id']; ?>"
+                    <?php echo isset($filters['teacher_id']) && $filters['teacher_id'] == $teacherItem['teacher_id'] ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($teacherItem['first_name'] . " " . $teacherItem['last_name']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-    <button type="submit">Показать</button>
-</form>
+        <label for="sort_by">Сортировать по:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="day_of_week" <?php echo $filters['sort_by'] == 'day_of_week' ? 'selected' : ''; ?>>День недели</option>
+            <option value="start_time" <?php echo $filters['sort_by'] == 'start_time' ? 'selected' : ''; ?>>Время начала</option>
+            <option value="class_name" <?php echo $filters['sort_by'] == 'class_name' ? 'selected' : ''; ?>>Класс</option>
+        </select>
+
+        <button type="submit">Применить</button>
+    </form>
+</div>
 
 <table>
     <thead>
